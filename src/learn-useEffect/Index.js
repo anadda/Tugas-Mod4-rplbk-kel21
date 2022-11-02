@@ -1,55 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import './Index.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./Index.css";
+
 export default function Index() {
-  const [count, setCount] = useState(0);
-  const [data, setData] = useState([]);
-  //dijalankan 1 kali
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/albums')
-      .then((response) => response.json())
+  const [quotes, setQuotes] = useState("");
+  const textRef = useRef();
+
+  const getQuote = () => {
+    fetch("https://type.fit/api/quotes")
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setData(data);
+        let randomIndex = Math.floor(Math.random() * data.length);
+        setQuotes(data[randomIndex]);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const randColor = () => {
+    const hex = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + hex;
+  };
+
+  useEffect(() => {
+    getQuote();
   }, []);
-  //dijalankan terus setiap ada perubahan count
+
   useEffect(() => {
-    if (count > 0) {
-      alert('component will update & count ${count}');
-    }
-  }, [count]);
-  //dijalankan terus menerus
-  useEffect(() => {
-    console.log('spam console kuy');
-  });
-  const countUp = () => {
-    setCount(count + 1);
-  };
-  const countDown = () => {
-    setCount(count - 1);
-  };
+    textRef.current.style.color = randColor();
+  }, [quotes]);
+
   return (
     <div className="Main">
       <p className="Text"> Learn useEffect</p>
-      <p>KELOMPOK21</p>
-      <ul>
-        {data.slice(0, 10).map((value) => (
-          <li key={value.id}>{value.title}</li>
-        ))}
-      </ul>
-      <p className="Text">{count}</p>
-      <div className="ViewButton">
-        <div className="ViewButton2">
-          <button className="Button" onClick={countUp}>
-            Up
-          </button>
-        </div>
-        <div className="ViewButton1">
-          <button className="Button" onClick={countDown}>
-            Down
+      <p>KELOMPOK 21</p>
+      <div className="quote">
+        <p ref={textRef}>{quotes.text}</p>
+        <p>- {quotes.author === null ? "Unknown" : `${quotes.author}`}</p>
+        <div className="btnContainer">
+          <button className="btn" onClick={getQuote}>
+            Get quote
           </button>
         </div>
       </div>
