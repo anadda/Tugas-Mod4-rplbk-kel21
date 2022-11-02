@@ -1,41 +1,40 @@
-import React, { useState, useContext } from 'react';
-import './Index.css';
-const themes = {
+import React, { useState, useContext } from "react";
+import "./Index.css";
+
+export const themes = {
   light: {
     id: 1,
-    foreground: '#000000',
-    background: '#eeeeee',
+    foreground: "#000000",
+    background: "#eeeeee",
   },
   dark: {
     id: 2,
-    foreground: '#ffffff',
-    background: '#222222',
+    foreground: "#ffffff",
+    background: "#222222",
   },
 };
-const ThemeContext = React.createContext(themes.light);
+export const ThemeContext = React.createContext(themes.light);
 export default function Index() {
-  const [theme, setTheme] = useState(themes.dark);
-  const changeTheme = () => {
-    if (theme.id === themes.light.id) {
-      setTheme(themes.dark);
-    } else {
-      setTheme(themes.light);
-    }
-  };
+  const { theme } = useContext(ThemeContext);
   return (
-    <ThemeContext.Provider value={{ theme, changeTheme }}>
-      <div className="Main" style={{ background: theme.background, color: theme.foreground }}>
-        <p className="Text">Theme by useContext</p>
-        <p>KELOMPOK21</p>
-        <ThemedButton />
-      </div>
-    </ThemeContext.Provider>
+    <div
+      className="Main"
+      style={{ background: theme.background, color: theme.foreground }}
+    >
+      <p className="Text">Theme by useContext</p>
+      <p>KELOMPOK21</p>
+      <ThemedButton />
+    </div>
   );
 }
 function ThemedButton() {
   const { theme, changeTheme } = useContext(ThemeContext);
   return (
-    <button className="Button" style={{ background: theme.background, color: theme.foreground }} onClick={changeTheme}>
+    <button
+      className="Button"
+      style={{ background: theme.background, color: theme.foreground }}
+      onClick={changeTheme}
+    >
       i am styled by theme context!
     </button>
   );
